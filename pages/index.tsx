@@ -64,16 +64,10 @@ export default function MotoServicePage() {
       description: "Balanceamento de rodas para eliminar vibrações e desgaste irregular",
     },
     {
-      name: "Mecânica em Geral",
-      price: 50.0,
-      icon: Tools,
-      description: "Serviços gerais de mecânica para todas as marcas e modelos de motos",
-    },
-    {
       name: "Troca de Óleo",
       price: 45.0,
       icon: Droplet,
-      description: "Troca de óleo do motor com filtro para manter o motor funcionando perfeitamente",
+      description: "Troca de óleo do motor para manter o motor funcionando perfeitamente",
     },
     {
       name: "Troca de Filtro de Combustível",
@@ -367,7 +361,7 @@ export default function MotoServicePage() {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             <div className="space-y-6">
-              <h3 className="text-3xl font-semibold text-slate-800">Mais de 15 anos de experiência</h3>
+              <h3 className="text-3xl font-semibold text-slate-800">Mais de 10 anos de experiência</h3>
               <p className="text-gray-600 text-lg leading-relaxed">
               A Snap Moto Peças é sua oficina de confiança para serviços de troca de óleo, limpeza de bico, injeção eletrônica e elétrica em motocicletas. Priorizamos a qualidade das peças e o atendimento personalizado, garantindo a satisfação de nossos clientes.
               </p>
