@@ -369,9 +369,7 @@ export default function MotoServicePage() {
             <div className="space-y-6">
               <h3 className="text-3xl font-semibold text-slate-800">Mais de 15 anos de experiência</h3>
               <p className="text-gray-600 text-lg leading-relaxed">
-                A MotoService nasceu da paixão por motos e do compromisso com a excelência em serviços automotivos.
-                Nossa equipe é composta por técnicos certificados e experientes, sempre atualizados com as últimas
-                tecnologias do mercado.
+              A Snap Moto Peças é sua oficina de confiança para serviços de troca de óleo, limpeza de bico, injeção eletrônica e elétrica em motocicletas. Priorizamos a qualidade das peças e o atendimento personalizado, garantindo a satisfação de nossos clientes.
               </p>
               <p className="text-gray-600 text-lg leading-relaxed">
                 Oferecemos serviços para todas as marcas e modelos de motos, desde as mais populares até as mais
@@ -379,8 +377,7 @@ export default function MotoServicePage() {
                 transparência, qualidade e preços justos.
               </p>
               <p className="text-gray-600 text-lg leading-relaxed">
-                Possuímos equipamentos de última geração e utilizamos apenas peças de qualidade, garantindo a
-                durabilidade e o desempenho de sua moto.
+              Com anos de experiência e dedicação, oferecemos soluções eficientes e confiáveis para manter sua motocicleta em perfeitas condições, sempre prezando pela segurança e desempenho do seu veículo.
               </p>
             </div>
                          <div className="relative">
@@ -408,24 +405,24 @@ export default function MotoServicePage() {
 
               <div className="flex items-center gap-4">
                 <MapPin className="text-red-500 flex-shrink-0" size={24} />
-                <span className="text-lg">Rua das Motos, 123 - Centro, São Paulo - SP</span>
+                <span className="text-lg">Rua Estância Velha, 241b - Jardim Lider, São Paulo, 02983-130, Brazil</span>
               </div>
 
               <div className="flex items-center gap-4">
                 <Phone className="text-red-500 flex-shrink-0" size={24} />
-                <span className="text-lg">(11) 99999-9999</span>
+                <span className="text-lg">+55  (11) 94720-2939</span>
               </div>
 
               <div className="flex items-center gap-4">
                 <Mail className="text-red-500 flex-shrink-0" size={24} />
-                <span className="text-lg">contato@motoservice.com.br</span>
+                <span className="text-lg">snapmotofrete@gmail.com</span>
               </div>
 
               <div className="flex items-start gap-4">
                 <Clock className="text-red-500 flex-shrink-0 mt-1" size={24} />
                 <div className="text-lg">
-                  <div>Segunda a Sexta: 8h às 18h</div>
-                  <div>Sábado: 8h às 12h</div>
+                  <div>Segunda a Sexta: 8h às 19h</div>
+                  <div>Sábados, domingos e alguns feridos: 9h às 15h</div>
                 </div>
               </div>
             </div>
