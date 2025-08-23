@@ -69,7 +69,7 @@ NODE_ENV=production
 MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/motoservice?retryWrites=true&w=majority
 JWT_SECRET=sua-chave-jwt-super-secreta-aqui
 NEXTAUTH_SECRET=sua-chave-nextauth-super-secreta-aqui
-NEXTAUTH_URL=https://motoservice-app.onrender.com
+NEXTAUTH_URL=https://motoservice.onrender.com
 ```
 
 **⚠️ IMPORTANTE:**
@@ -81,7 +81,7 @@ NEXTAUTH_URL=https://motoservice-app.onrender.com
 
 1. Clique em **"Create Web Service"**
 2. Aguarde o build (pode demorar 5-10 minutos)
-3. Seu app estará disponível em: `https://motoservice-app.onrender.com`
+3. Seu app estará disponível em: `https://motoservice.onrender.com`
 
 ## 🔧 Troubleshooting
 
