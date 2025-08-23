@@ -147,16 +147,6 @@ export default function MeusAgendamentosPage() {
       </header>
 
       <div className="max-w-6xl mx-auto px-4 py-8">
-        {/* Botão Voltar ao Menu Principal */}
-        <div className="mb-8">
-          <button
-            onClick={() => router.push("/")}
-            className="btn-secondary flex items-center gap-2"
-          >
-            <Home size={20} />
-            Voltar ao Menu Principal
-          </button>
-        </div>
 
         {/* Título da seção */}
         <div className="text-center mb-12">
