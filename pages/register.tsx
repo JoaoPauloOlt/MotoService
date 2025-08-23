@@ -3,21 +3,23 @@
 import React, { useState, useEffect } from "react"
 import { useAuth } from "../contexts/AuthContext"
 import { useRouter } from "next/router"
-import { Eye, EyeOff, Mail, Lock, ArrowLeft, LogIn } from "lucide-react"
+import { Eye, EyeOff, Mail, Lock, User, Phone, ArrowLeft, UserPlus } from "lucide-react"
 
-export default function LoginPage() {
+export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [message, setMessage] = useState("")
   const [messageType, setMessageType] = useState<"success" | "error">("success")
 
-  // Formulário de login
-  const [loginData, setLoginData] = useState({
+  // Formulário de registro
+  const [registerData, setRegisterData] = useState({
+    name: "",
     email: "",
-    password: ""
+    password: "",
+    phone: ""
   })
 
-  const { user, login } = useAuth()
+  const { user, register } = useAuth()
   const router = useRouter()
   const { callbackUrl } = router.query
 
@@ -28,20 +30,25 @@ export default function LoginPage() {
     }
   }, [user, router, callbackUrl])
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
     setMessage("")
 
     try {
-      const result = await login(loginData.email, loginData.password)
+      const result = await register(
+        registerData.name,
+        registerData.email,
+        registerData.password,
+        registerData.phone
+      )
       
       if (result.success) {
         setMessageType("success")
         setMessage(result.message)
         setTimeout(() => {
           router.push((callbackUrl as string) || "/")
-        }, 1500)   
+        }, 1500)
       } else {
         setMessageType("error")
         setMessage(result.message)
@@ -56,7 +63,7 @@ export default function LoginPage() {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
-    setLoginData(prev => ({ ...prev, [name]: value }))
+    setRegisterData(prev => ({ ...prev, [name]: value }))
   }
 
   // Se já estiver logado, mostrar loading
@@ -84,10 +91,10 @@ export default function LoginPage() {
             Voltar ao site
           </button>
           <h1 className="text-3xl font-bold text-white mb-2">
-            Entrar
+            Criar Conta
           </h1>
           <p className="text-gray-400">
-            Faça login para agendar seus serviços
+            Crie sua conta para começar a agendar serviços
           </p>
         </div>
 
@@ -104,8 +111,26 @@ export default function LoginPage() {
             </div>
           )}
 
-          {/* Formulário de Login */}
-          <form onSubmit={handleLogin} className="space-y-4">
+          {/* Formulário de Registro */}
+          <form onSubmit={handleRegister} className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">
+                Nome Completo
+              </label>
+              <div className="relative">
+                <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={20} />
+                <input
+                  type="text"
+                  name="name"
+                  value={registerData.name}
+                  onChange={handleInputChange}
+                  required
+                  className="form-input pl-10"
+                  placeholder="Seu nome completo"
+                />
+              </div>
+            </div>
+
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
                 Email
@@ -115,11 +140,29 @@ export default function LoginPage() {
                 <input
                   type="email"
                   name="email"
-                  value={loginData.email}
+                  value={registerData.email}
                   onChange={handleInputChange}
                   required
                   className="form-input pl-10"
                   placeholder="seu@email.com"
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">
+                Telefone
+              </label>
+              <div className="relative">
+                <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" size={20} />
+                <input
+                  type="tel"
+                  name="phone"
+                  value={registerData.phone}
+                  onChange={handleInputChange}
+                  required
+                  className="form-input pl-10"
+                  placeholder="(11) 99999-9999"
                 />
               </div>
             </div>
@@ -133,11 +176,12 @@ export default function LoginPage() {
                 <input
                   type={showPassword ? "text" : "password"}
                   name="password"
-                  value={loginData.password}
+                  value={registerData.password}
                   onChange={handleInputChange}
                   required
+                  minLength={6}
                   className="form-input pl-10 pr-12"
-                  placeholder="Sua senha"
+                  placeholder="Mínimo 6 caracteres"
                 />
                 <button
                   type="button"
@@ -154,19 +198,19 @@ export default function LoginPage() {
               disabled={isLoading}
               className="btn-primary w-full disabled:bg-gray-600 disabled:cursor-not-allowed"
             >
-              {isLoading ? "Entrando..." : "Entrar"}
+              {isLoading ? "Criando conta..." : "Criar Conta"}
             </button>
           </form>
 
           {/* Footer */}
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-400">
-              Não tem uma conta?
+              Já tem uma conta?
               <button
-                onClick={() => router.push("/register")}
+                onClick={() => router.push("/login")}
                 className="ml-1 text-green-500 hover:text-green-400 font-medium"
               >
-                Cadastre-se
+                Faça login
               </button>
             </p>
           </div>

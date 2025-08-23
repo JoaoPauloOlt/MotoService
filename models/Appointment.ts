@@ -7,6 +7,7 @@ export interface IAppointment extends mongoose.Document {
   servicePrice: number
   appointmentDate: Date
   appointmentTime: string
+  duration: number
   motorcycle: string
   plate?: string
   notes?: string
@@ -22,6 +23,7 @@ const appointmentSchema = new mongoose.Schema<IAppointment>({
   servicePrice: { type: Number, required: true },
   appointmentDate: { type: Date, required: true },
   appointmentTime: { type: String, required: true },
+  duration: { type: Number, required: true, default: 1 },
   motorcycle: { type: String, required: true },
   plate: { type: String },
   notes: { type: String },

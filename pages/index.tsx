@@ -1,460 +1,453 @@
 "use client"
 
-import React, { useState, useEffect } from "react"
+import { useState, useEffect } from "react"
+import { useRouter } from "next/router"
 import { useAuth } from "../contexts/AuthContext"
-import {
-  Phone,
-  Mail,
-  MapPin,
-  Clock,
-  Menu,
-  X,
-  Wrench,
-  Cog,
-  Shield,
-  CircleDot as Tire,
-  PenTool as Tools,
-  Droplet,
-  Filter,
-  Car,
-  SprayCan as Spray,
-  Cpu,
-  Laptop,
-  Zap,
-  Wind,
-} from "lucide-react"
+import { Menu, X, MessageCircle, Phone, MapPin, Clock, Wrench, Star, ArrowRight, LogOut, User } from "lucide-react"
 
-export default function MotoServicePage() {
-  const { user, logout } = useAuth()
+export default function HomePage() {
+  const { user, isLoading, logout } = useAuth()
+  const router = useRouter()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 100)
-    }
-
+    const handleScroll = () => setIsScrolled(window.scrollY > 50)
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
-
-  const services = [
-    {
-      name: "Concerto de Motor",
-      price: 150.0,
-      icon: Wrench,
-      description: "Reparo e manutenção completa do motor com peças de qualidade e garantia",
-    },
-    {
-      name: "Concerto de Direção",
-      price: 80.0,
-      icon: Cog,
-      description: "Reparo e regulagem do sistema de direção para máxima segurança",
-    },
-    {
-      name: "Concerto de Suspensão",
-      price: 120.0,
-      icon: Shield,
-      description: "Reparo e regulagem do sistema de suspensão para melhor estabilidade",
-    },
-    {
-      name: "Balanceamento",
-      price: 25.0,
-      icon: Tire,
-      description: "Balanceamento de rodas para eliminar vibrações e desgaste irregular",
-    },
-    {
-      name: "Troca de Óleo",
-      price: 45.0,
-      icon: Droplet,
-      description: "Troca de óleo do motor para manter o motor funcionando perfeitamente",
-    },
-    {
-      name: "Troca de Filtro de Combustível",
-      price: 35.0,
-      icon: Filter,
-      description: "Substituição do filtro de combustível para melhor desempenho",
-    },
-    {
-      name: "Troca de Pastilha de Freio",
-      price: 60.0,
-      icon: Car,
-      description: "Substituição das pastilhas de freio dianteiro e traseiro",
-    },
-    {
-      name: "Troca de Lona de Freio",
-      price: 40.0,
-      icon: Car,
-      description: "Substituição da lona de freio traseiro para máxima segurança",
-    },
-    {
-      name: "Limpeza de Bico",
-      price: 70.0,
-      icon: Spray,
-      description: "Limpeza e regulagem dos bicos injetores para melhor combustão",
-    },
-    {
-      name: "Injeção Eletrônica",
-      price: 90.0,
-      icon: Cpu,
-      description: "Diagnóstico e reparo do sistema de injeção eletrônica",
-    },
-    {
-      name: "Scanner Elétrico",
-      price: 40.0,
-      icon: Laptop,
-      description: "Diagnóstico computadorizado para identificar problemas elétricos",
-    },
-    { name: "Elétrica", price: 60.0, icon: Zap, description: "Reparo e manutenção do sistema elétrico da moto" },
-    {
-      name: "Limpeza de Carburador",
-      price: 80.0,
-      icon: Wind,
-      description: "Limpeza completa e regulagem do carburador para melhor funcionamento",
-    },
-  ]
-
-  const bookService = (serviceName: string, price: number) => {
-    const message = `Olá! Gostaria de agendar o serviço: ${serviceName} - R$ ${price.toFixed(2)}`
-    const whatsappUrl = `https://wa.me/5511999999999?text=${encodeURIComponent(message)}`
-    window.open(whatsappUrl, "_blank")
-  }
-
-  const handleContactSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    const formData = new FormData(e.currentTarget)
-    const name = formData.get("name") as string
-    const email = formData.get("email") as string
-    const phone = formData.get("phone") as string
-    const message = formData.get("message") as string
-
-    // Here you would typically send the data to your backend
-    console.log("Contact form submitted:", { name, email, phone, message })
-    alert("Mensagem enviada com sucesso! Entraremos em contato em breve.")
-    e.currentTarget.reset()
-  }
 
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId)
     if (element) {
       element.scrollIntoView({ behavior: "smooth" })
+      setIsMenuOpen(false)
     }
+  }
+
+  const bookService = (serviceName: string) => {
+    if (user) {
+      router.push("/agendamento")
+    } else {
+      router.push("/login?callbackUrl=/agendamento")
+    }
+  }
+
+  const handleLogout = () => {
+    logout()
+    router.push("/")
     setIsMenuOpen(false)
   }
 
+  const services = [
+    { name: "Concerto de Motor", description: "Reparo completo de motores com garantia", price: "R$ 150,00", icon: "🔧" },
+    { name: "Concerto de Direção", description: "Ajuste e reparo do sistema de direção", price: "R$ 80,00", icon: "🎯" },
+    { name: "Concerto de Suspensão", description: "Manutenção e reparo da suspensão", price: "R$ 120,00", icon: "⚡" },
+    { name: "Balanceamento", description: "Balanceamento de rodas e pneus", price: "R$ 25,00", icon: "⚖️" },
+    { name: "Troca de Óleo", description: "Troca de óleo e filtros", price: "R$ 45,00", icon: "🛢️" },
+    { name: "Troca de Filtro de Combustível", description: "Substituição do filtro de combustível", price: "R$ 35,00", icon: "⛽" },
+    { name: "Troca de Pastilha de Freio", description: "Substituição das pastilhas de freio", price: "R$ 60,00", icon: "🛑" },
+    { name: "Troca de Lona de Freio", description: "Substituição das lonas de freio", price: "R$ 40,00", icon: "🛑" },
+    { name: "Limpeza de Bico", description: "Limpeza e regulagem dos bicos injetores", price: "R$ 70,00", icon: "💧" },
+    { name: "Injeção Eletrônica", description: "Diagnóstico e reparo da injeção", price: "R$ 90,00", icon: "🔌" },
+    { name: "Scanner Elétrico", description: "Diagnóstico completo com scanner", price: "R$ 40,00", icon: "📱" },
+    { name: "Elétrica", description: "Reparo de sistemas elétricos", price: "R$ 60,00", icon: "⚡" },
+    { name: "Limpeza de Carburador", description: "Limpeza e regulagem do carburador", price: "R$ 80,00", icon: "🔧" },
+  ]
+
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-black text-white">
       {/* Header */}
       <header
         className={`fixed w-full top-0 z-50 transition-all duration-300 ${
-          isScrolled ? "bg-slate-800/95 backdrop-blur-sm" : "bg-gradient-to-r from-slate-800 to-slate-700"
+          isScrolled ? "header-scrolled" : "header-gradient"
         }`}
       >
-        <div className="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
+        <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <img src="/img/logoSnap.webp" alt="MotoService Logo" className="h-16 w-16 rounded-full" />
-            <span className="text-2xl font-bold text-red-500">MotoService</span>
+            <img src="/img/logoSnap.webp" alt="MotoService Logo" className="h-12 w-auto" />
+            <h1 className="text-2xl font-bold text-green-500">MotoService</h1>
           </div>
 
-          <nav className="hidden md:flex">
-            <ul className="flex gap-8">
-              <li>
+          {/* Desktop Navigation */}
+          <nav className="hidden md:flex items-center gap-8">
+            <button onClick={() => scrollToSection("servicos")} className="text-gray-300 hover:text-green-500 transition-colors">
+              Serviços
+            </button>
+            <button onClick={() => scrollToSection("sobre")} className="text-gray-300 hover:text-green-500 transition-colors">
+              Sobre
+            </button>
+            <button onClick={() => scrollToSection("contato")} className="text-gray-300 hover:text-green-500 transition-colors">
+              Contato
+            </button>
+            {user ? (
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-2 text-gray-300">
+                  <User size={16} />
+                  <span className="text-sm">{user.name}</span>
+                </div>
                 <button
-                  onClick={() => scrollToSection("home")}
-                  className="text-white hover:text-red-500 transition-colors"
+                  onClick={() => router.push("/meus-agendamentos")}
+                  className="btn-secondary"
                 >
-                  Início
+                  Meus Agendamentos
                 </button>
-              </li>
-              <li>
                 <button
-                  onClick={() => scrollToSection("services")}
-                  className="text-white hover:text-red-500 transition-colors"
+                  onClick={() => router.push("/agendamento")}
+                  className="btn-primary"
                 >
-                  Serviços
+                  Agendar Serviço
                 </button>
-              </li>
-              <li>
                 <button
-                  onClick={() => scrollToSection("about")}
-                  className="text-white hover:text-red-500 transition-colors"
+                  onClick={handleLogout}
+                  className="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors flex items-center gap-2"
                 >
-                  Sobre
+                  <LogOut size={16} />
+                  Sair
                 </button>
-              </li>
-              <li>
+              </div>
+            ) : (
+              <div className="flex items-center gap-4">
                 <button
-                  onClick={() => scrollToSection("contact")}
-                  className="text-white hover:text-red-500 transition-colors"
+                  onClick={() => router.push("/login")}
+                  className="btn-secondary"
                 >
-                  Contato
+                  Entrar
                 </button>
-              </li>
-              <li className="flex gap-4">
-                {user ? (
-                  <>
-                    <a
-                      href={`/login?callbackUrl=/meus-agendamentos`}
-                      className="bg-slate-500 hover:bg-slate-600 text-white px-4 py-2 rounded-lg font-semibold transition-colors"
-                    >
-                      Meus Agendamentos
-                    </a>
-
-                    <a
-                      href={`/login?callbackUrl=/agendamento`}
-                      className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-semibold transition-colors"
-                    >
-                      Agendar
-                    </a>
-
-                  </>
-                ) : (
-                  <a
-                    href={`/login?callbackUrl=/meus-agendamentos`}
-                    className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-semibold transition-colors"
-                  >
-                    Entrar
-                  </a>
-
-                )}
-              </li>
-            </ul>
+                <button
+                  onClick={() => router.push("/register")}
+                  className="btn-primary"
+                >
+                  Cadastrar
+                </button>
+              </div>
+            )}
           </nav>
 
-          <button className="md:hidden text-white text-2xl" onClick={() => setIsMenuOpen(!isMenuOpen)}>
-            {isMenuOpen ? <X /> : <Menu />}
+          {/* Mobile Menu Button */}
+          <button
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            className="md:hidden text-white p-2"
+          >
+            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
 
-        {/* Mobile Menu */}
+        {/* Mobile Navigation */}
         {isMenuOpen && (
-          <div className="md:hidden bg-slate-800 border-t border-slate-600">
-            <ul className="flex flex-col p-4 gap-4">
-              <li>
+          <div className="mobile-menu">
+            <div className="flex flex-col h-full">
+              <div className="flex justify-between items-center p-4 border-b border-gray-800">
+                <h2 className="text-xl font-bold text-green-500">Menu</h2>
                 <button
-                  onClick={() => scrollToSection("home")}
-                  className="text-white hover:text-red-500 transition-colors"
+                  onClick={() => setIsMenuOpen(false)}
+                  className="text-white p-2"
                 >
-                  Início
+                  <X size={24} />
                 </button>
-              </li>
-              <li>
+              </div>
+              
+              {/* User Info Mobile */}
+              {user && (
+                <div className="p-4 border-b border-gray-800 bg-gray-800/50">
+                  <div className="flex items-center gap-3">
+                    <User size={20} className="text-green-500" />
+                    <div>
+                      <p className="text-white font-medium">{user.name}</p>
+                      <p className="text-gray-400 text-sm">{user.email}</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+              
+              <nav className="flex-1">
                 <button
-                  onClick={() => scrollToSection("services")}
-                  className="text-white hover:text-red-500 transition-colors"
+                  onClick={() => scrollToSection("servicos")}
+                  className="mobile-menu-item"
                 >
                   Serviços
                 </button>
-              </li>
-              <li>
                 <button
-                  onClick={() => scrollToSection("about")}
-                  className="text-white hover:text-red-500 transition-colors"
+                  onClick={() => scrollToSection("sobre")}
+                  className="mobile-menu-item"
                 >
                   Sobre
                 </button>
-              </li>
-              <li>
                 <button
-                  onClick={() => scrollToSection("contact")}
-                  className="text-white hover:text-red-500 transition-colors"
+                  onClick={() => scrollToSection("contato")}
+                  className="mobile-menu-item"
                 >
                   Contato
                 </button>
-              </li>
-              <li>
                 {user ? (
-                  <div className="flex gap-2">
-                    <a
-                      href="/agendamento"
-                      className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-semibold transition-colors"
-                    >
-                      Agendar
-                    </a>
-                    <a
-                      href="/meus-agendamentos"
-                      className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold transition-colors"
+                  <>
+                    <button
+                      onClick={() => {
+                        router.push("/meus-agendamentos")
+                        setIsMenuOpen(false)
+                      }}
+                      className="mobile-menu-item"
                     >
                       Meus Agendamentos
-                    </a>
-                  </div>
+                    </button>
+                    <button
+                      onClick={() => {
+                        router.push("/agendamento")
+                        setIsMenuOpen(false)
+                      }}
+                      className="mobile-menu-item bg-green-500 text-black font-semibold"
+                    >
+                      Agendar Serviço
+                    </button>
+                    <button
+                      onClick={() => {
+                        handleLogout()
+                        setIsMenuOpen(false)
+                      }}
+                      className="mobile-menu-item bg-gray-700 text-white"
+                    >
+                      <LogOut size={16} className="inline mr-2" />
+                      Sair
+                    </button>
+                  </>
                 ) : (
-                  <a
-                    href="/login"
-                    className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg font-semibold transition-colors"
-                  >
-                    Entrar
-                  </a>
+                  <>
+                    <button
+                      onClick={() => {
+                        router.push("/login")
+                        setIsMenuOpen(false)
+                      }}
+                      className="mobile-menu-item"
+                    >
+                      Entrar
+                    </button>
+                    <button
+                      onClick={() => {
+                        router.push("/register")
+                        setIsMenuOpen(false)
+                      }}
+                      className="mobile-menu-item bg-green-500 text-black font-semibold"
+                    >
+                      Cadastrar
+                    </button>
+                  </>
                 )}
-              </li>
-            </ul>
+              </nav>
+            </div>
           </div>
         )}
       </header>
 
       {/* Hero Section */}
-      <section id="home" className="relative h-screen flex items-center justify-center text-center text-white">
-        <div
-          className="absolute inset-0 bg-gradient-to-br from-slate-800 via-slate-700 to-slate-900"
-        />
-        <div className="relative z-10 max-w-4xl mx-auto px-4 animate-fade-in">
-          <h1 className="text-5xl md:text-6xl font-bold mb-6 drop-shadow-lg">Especialistas em Motos</h1>
-          <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto leading-relaxed">
-            Oferecemos serviços de qualidade para sua moto com preços justos e garantia de satisfação. Nossa equipe é
-            especializada em todas as marcas e modelos.
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <img
+            src="/img/motorcycle-mechanic-garage.png"
+            alt="Oficina de Moto"
+            className="w-full h-full object-cover opacity-30"
+          />
+          <div className="hero-overlay absolute inset-0"></div>
+        </div>
+        
+        <div className="relative z-10 text-center max-w-4xl mx-auto px-4">
+          <h1 className="text-5xl md:text-7xl font-bold mb-6 animate-bounce-in">
+            <span className="text-white">Moto</span>
+            <span className="text-green-500">Service</span>
+          </h1>
+          <p className="text-xl md:text-2xl text-gray-300 mb-8 animate-slide-up max-w-3xl mx-auto">
+            Especialistas em manutenção e reparo de motocicletas. 
+            Qualidade profissional com preços justos e atendimento personalizado.
           </p>
-          <button
-            onClick={() => scrollToSection("services")}
-            className="bg-red-500 hover:bg-red-600 text-white px-8 py-4 rounded-full text-lg font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg"
-          >
-            Ver Serviços
-          </button>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center animate-fade-in">
+            <button
+              onClick={() => bookService("")}
+              className="btn-primary text-lg px-8 py-4 rounded-full"
+            >
+              {user ? "Agendar Serviço" : "Fazer Login para Agendar"}
+            </button>
+            <a
+              href="https://wa.me/5511947202939?text=Olá! Gostaria de saber mais sobre os serviços da MotoService."
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn-whatsapp text-lg px-8 py-4 rounded-full"
+            >
+              <MessageCircle size={24} />
+              Falar no WhatsApp
+            </a>
+          </div>
         </div>
       </section>
 
       {/* Services Section */}
-      <section id="services" className="py-20 bg-gray-50">
+      <section id="servicos" className="py-20 bg-gray-900">
         <div className="max-w-6xl mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-slate-800 mb-4">Nossos Serviços</h2>
-            <p className="text-xl text-gray-600">Serviços profissionais com preços transparentes</p>
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">
+              <span className="text-white">Nossos</span>
+              <span className="text-green-500"> Serviços</span>
+            </h2>
+            <p className="text-xl text-gray-400 max-w-3xl mx-auto">
+              Oferecemos uma ampla gama de serviços para manter sua moto funcionando perfeitamente
+            </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {services.map((service, index) => {
-              const IconComponent = service.icon
-              return (
-                <div
-                  key={index}
-                  className="bg-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-2 text-center"
-                >
-                  <div className="text-red-500 mb-4 flex justify-center">
-                    <IconComponent size={48} />
-                  </div>
-                  <h3 className="text-xl font-semibold text-slate-800 mb-3">{service.name}</h3>
-                  <p className="text-gray-600 mb-4 leading-relaxed">{service.description}</p>
-                  <div className="text-2xl font-bold text-green-600 mb-4">
-                    {service.price >= 50
-                      ? `A partir de R$ ${service.price.toFixed(2)}`
-                      : `R$ ${service.price.toFixed(2)}`}
-                  </div>
+          <div className="services-grid">
+            {services.map((service, index) => (
+              <div key={index} className="service-card group">
+                <div className="text-4xl mb-4">{service.icon}</div>
+                <h3 className="text-xl font-semibold text-white mb-3 group-hover:text-green-500 transition-colors">
+                  {service.name}
+                </h3>
+                <p className="text-gray-400 mb-4">{service.description}</p>
+                <div className="flex items-center justify-between mb-4">
+                  <span className="text-2xl font-bold text-green-500">{service.price}</span>
                   <button
-                    onClick={() => window.location.href = `/agendamento?service=${encodeURIComponent(service.name)}&price=${service.price}`}
-                    className="bg-red-500 hover:bg-red-600 text-white px-6 py-3 rounded-full font-semibold transition-colors duration-300"
+                    onClick={() => bookService(service.name)}
+                    className="text-green-500 hover:text-green-400 transition-colors flex items-center gap-2 group-hover:translate-x-1 transition-transform"
                   >
-                    Agendar
+                    {user ? "Agendar" : "Fazer Login"} <ArrowRight size={16} />
                   </button>
                 </div>
-              )
-            })}
+                
+                {/* Botão WhatsApp para cada serviço */}
+                <button
+                  onClick={() => {
+                    const message = `Olá! Gostaria de agendar o serviço: ${service.name} - ${service.price}`
+                    const whatsappUrl = `https://wa.me/5511947202939?text=${encodeURIComponent(message)}`
+                    window.open(whatsappUrl, "_blank")
+                  }}
+                  className="btn-whatsapp w-full"
+                >
+                  <MessageCircle size={16} />
+                  Falar no WhatsApp
+                </button>
+              </div>
+            ))}
           </div>
         </div>
       </section>
 
       {/* About Section */}
-      <section id="about" className="py-20 bg-white">
+      <section id="sobre" className="py-20 bg-black">
         <div className="max-w-6xl mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-slate-800 mb-4">Sobre Nós</h2>
-            <p className="text-xl text-gray-600">Conheça nossa história e compromisso com a qualidade</p>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <div className="space-y-6">
-              <h3 className="text-3xl font-semibold text-slate-800">Mais de 10 anos de experiência</h3>
-              <p className="text-gray-600 text-lg leading-relaxed">
-              A Snap Moto Peças é sua oficina de confiança para serviços de troca de óleo, limpeza de bico, injeção eletrônica e elétrica em motocicletas. Priorizamos a qualidade das peças e o atendimento personalizado, garantindo a satisfação de nossos clientes.
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div>
+              <h2 className="text-4xl md:text-5xl font-bold mb-6">
+                <span className="text-white">Sobre a</span>
+                <span className="text-green-500"> MotoService</span>
+              </h2>
+              <p className="text-lg text-gray-400 mb-6">
+                Somos uma oficina especializada em motocicletas com anos de experiência no mercado. 
+                Nossa missão é oferecer serviços de qualidade com transparência e confiança.
               </p>
-              <p className="text-gray-600 text-lg leading-relaxed">
-                Oferecemos serviços para todas as marcas e modelos de motos, desde as mais populares até as mais
-                exclusivas. Nossa missão é proporcionar a melhor experiência possível aos nossos clientes, com
-                transparência, qualidade e preços justos.
-              </p>
-              <p className="text-gray-600 text-lg leading-relaxed">
-              Com anos de experiência e dedicação, oferecemos soluções eficientes e confiáveis para manter sua motocicleta em perfeitas condições, sempre prezando pela segurança e desempenho do seu veículo.
-              </p>
+              <div className="space-y-4">
+                <div className="flex items-center gap-3">
+                  <Wrench className="text-green-500" size={20} />
+                  <span className="text-gray-300">Técnicos certificados e experientes</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Star className="text-green-500" size={20} />
+                  <span className="text-gray-300">Garantia em todos os serviços</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Clock className="text-green-500" size={20} />
+                  <span className="text-gray-300">Agendamento online e atendimento rápido</span>
+                </div>
+              </div>
             </div>
-                         <div className="relative">
-               <img 
-                 src="/img/motorcycle-mechanic-garage.png" 
-                 alt="Nossa Oficina de Mecânica de Motos" 
-                 className="rounded-2xl shadow-xl w-full h-96 object-cover"
-               />
-             </div>
+            <div className="relative">
+              <img
+                src="/img/motorcycle-workshop-garage-tools.png"
+                alt="Ferramentas da Oficina"
+                className="rounded-2xl shadow-custom-lg"
+              />
+            </div>
           </div>
         </div>
       </section>
 
       {/* Contact Section */}
-      <section id="contact" className="py-20 bg-slate-800 text-white">
+      <section id="contato" className="py-20 bg-gray-900">
         <div className="max-w-6xl mx-auto px-4">
           <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold mb-4">Entre em Contato</h2>
-            <p className="text-xl text-gray-300">Estamos aqui para ajudar com sua moto</p>
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">
+              <span className="text-white">Entre em</span>
+              <span className="text-green-500"> Contato</span>
+            </h2>
+            <p className="text-xl text-gray-400">
+              Estamos aqui para ajudar com sua moto
+            </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          <div className="grid md:grid-cols-2 gap-12">
             <div className="space-y-8">
-              <h3 className="text-2xl font-semibold text-red-500 mb-6">Informações de Contato</h3>
-
-              <div className="flex items-center gap-4">
-                <MapPin className="text-red-500 flex-shrink-0" size={24} />
-                <span className="text-lg">Rua Estância Velha, 241b - Jardim Lider, São Paulo, 02983-130, Brazil</span>
-              </div>
-
-              <div className="flex items-center gap-4">
-                <Phone className="text-red-500 flex-shrink-0" size={24} />
-                <span className="text-lg">+55  (11) 94720-2939</span>
-              </div>
-
-              <div className="flex items-center gap-4">
-                <Mail className="text-red-500 flex-shrink-0" size={24} />
-                <span className="text-lg">snapmotofrete@gmail.com</span>
+              <div className="flex items-start gap-4">
+                <div className="bg-green-500 p-3 rounded-full">
+                  <Phone className="text-black" size={20} />
+                </div>
+                <div>
+                  <h3 className="text-xl font-semibold text-white mb-2">Telefone</h3>
+                  <p className="text-gray-400">(11) 94720-2939</p>
+                </div>
               </div>
 
               <div className="flex items-start gap-4">
-                <Clock className="text-red-500 flex-shrink-0 mt-1" size={24} />
-                <div className="text-lg">
-                  <div>Segunda a Sexta: 8h às 19h</div>
-                  <div>Sábados, domingos e alguns feridos: 9h às 15h</div>
+                <div className="bg-green-500 p-3 rounded-full">
+                  <MapPin className="text-black" size={20} />
                 </div>
+                <div>
+                  <h3 className="text-xl font-semibold text-white mb-2">Endereço</h3>
+                  <p className="text-gray-400">São Paulo, SP - Brasil</p>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-4">
+                <div className="bg-green-500 p-3 rounded-full">
+                  <Clock className="text-black" size={20} />
+                </div>
+                <div>
+                  <h3 className="text-xl font-semibold text-white mb-2">Horários de Trabalho</h3>
+                  <div className="text-gray-400">
+                    <div>Segunda a Sexta: 8h às 19h</div>
+                    <div>Sábados e feriados: 9h às 15h</div>
+                    <div>Domingos: Fechado</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Botão WhatsApp proeminente */}
+              <div className="pt-4">
+                <a
+                  href="https://wa.me/5511947202939?text=Olá! Gostaria de saber mais sobre os serviços da MotoService."
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-whatsapp w-full text-center justify-center"
+                >
+                  <MessageCircle size={20} />
+                  Falar no WhatsApp
+                </a>
               </div>
             </div>
 
-            <div>
-              <form onSubmit={handleContactSubmit} className="space-y-6">
+            <div className="bg-gray-800 rounded-2xl p-8 shadow-custom">
+              <h3 className="text-2xl font-bold text-white mb-6">Envie uma Mensagem</h3>
+              <form className="space-y-4">
                 <input
                   type="text"
-                  name="name"
-                  placeholder="Seu Nome"
-                  required
-                  className="w-full p-4 rounded-lg bg-slate-700 border border-slate-600 text-white placeholder-gray-400 focus:outline-none focus:border-red-500 transition-colors"
+                  placeholder="Seu nome"
+                  className="form-input"
                 />
                 <input
                   type="email"
-                  name="email"
-                  placeholder="Seu Email"
-                  required
-                  className="w-full p-4 rounded-lg bg-slate-700 border border-slate-600 text-white placeholder-gray-400 focus:outline-none focus:border-red-500 transition-colors"
-                />
-                <input
-                  type="tel"
-                  name="phone"
-                  placeholder="Seu Telefone"
-                  required
-                  className="w-full p-4 rounded-lg bg-slate-700 border border-slate-600 text-white placeholder-gray-400 focus:outline-none focus:border-red-500 transition-colors"
+                  placeholder="Seu email"
+                  className="form-input"
                 />
                 <textarea
-                  name="message"
-                  placeholder="Mensagem"
-                  rows={5}
-                  required
-                  className="w-full p-4 rounded-lg bg-slate-700 border border-slate-600 text-white placeholder-gray-400 focus:outline-none focus:border-red-500 transition-colors resize-none"
-                />
-                <button
-                  type="submit"
-                  className="w-full bg-red-500 hover:bg-red-600 text-white py-4 rounded-lg font-semibold text-lg transition-colors duration-300"
-                >
+                  placeholder="Sua mensagem"
+                  rows={4}
+                  className="form-input resize-none"
+                ></textarea>
+                <button type="submit" className="btn-primary w-full">
                   Enviar Mensagem
                 </button>
               </form>
@@ -464,23 +457,28 @@ export default function MotoServicePage() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-slate-900 text-white py-8 text-center">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="flex justify-center gap-6 mb-6">
-            <a href="#" className="text-2xl hover:text-red-500 transition-colors">
-              📘
+      <footer className="bg-black py-12 border-t border-gray-800">
+        <div className="max-w-6xl mx-auto px-4 text-center">
+          <div className="flex items-center justify-center gap-4 mb-6">
+            <img src="/img/logoSnap.webp" alt="MotoService Logo" className="h-10 w-auto" />
+            <h3 className="text-2xl font-bold text-green-500">MotoService</h3>
+          </div>
+          <p className="text-gray-400 mb-6">
+            Especialistas em motocicletas com qualidade e confiança
+          </p>
+          <div className="flex justify-center gap-6">
+            <a href="#" className="footer-social">
+              <Phone size={24} />
             </a>
-            <a href="#" className="text-2xl hover:text-red-500 transition-colors">
-              📷
-            </a>
-            <a href="#" className="text-2xl hover:text-red-500 transition-colors">
-              💬
-            </a>
-            <a href="#" className="text-2xl hover:text-red-500 transition-colors">
-              📺
+            <a href="#" className="footer-social">
+              <MessageCircle size={24} />
             </a>
           </div>
-          <p className="text-gray-400">&copy; 2024 MotoService. Todos os direitos reservados.</p>
+          <div className="mt-8 pt-8 border-t border-gray-800">
+            <p className="text-gray-500">
+              © 2024 MotoService. Todos os direitos reservados.
+            </p>
+          </div>
         </div>
       </footer>
     </div>

@@ -3,6 +3,23 @@ import type { NextApiRequest, NextApiResponse } from "next"
 import mongoose from "mongoose"
 import dbConnect from "../../../lib/mongodb"
 import Appointment from "../../../models/Appointment"
+import jwt from "jsonwebtoken"
+
+// Função para verificar o token
+const verifyToken = (req: NextApiRequest) => {
+  try {
+    const authHeader = req.headers.authorization
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return null
+    }
+    
+    const token = authHeader.substring(7)
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'fallback-secret') as any
+    return decoded
+  } catch (error) {
+    return null
+  }
+}
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await dbConnect()
@@ -10,18 +27,80 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   // Criar agendamento
   if (req.method === "POST") {
     try {
+      const decoded = verifyToken(req)
+      if (!decoded) {
+        return res.status(401).json({ message: "Token inválido" })
+      }
+
       const {
-        userId,
         serviceName,
         servicePrice,
         appointmentDate,
         appointmentTime,
+        duration,
         motorcycle,
         plate,
         notes,
       } = req.body
 
+      const userId = decoded.userId || decoded._id
+
       console.log("Criando agendamento para:", userId)
+
+      // Verificar conflitos de horário antes de criar
+      const selectedDateTime = new Date(appointmentDate)
+      const [hours, minutes] = appointmentTime.split(':').map(Number)
+      selectedDateTime.setHours(hours, minutes, 0, 0)
+      
+      const endTime = new Date(selectedDateTime.getTime() + (duration || 1) * 60 * 60 * 1000)
+
+      // Verificar se o usuário já tem agendamento no mesmo horário neste dia
+      const userAppointmentsOnDate = await Appointment.find({
+        userId: new mongoose.Types.ObjectId(userId),
+        appointmentDate: {
+          $gte: new Date(selectedDateTime.getFullYear(), selectedDateTime.getMonth(), selectedDateTime.getDate()),
+          $lt: new Date(selectedDateTime.getFullYear(), selectedDateTime.getMonth(), selectedDateTime.getDate() + 1)
+        },
+        status: { $ne: 'cancelled' }
+      })
+
+      // Verificar se o usuário já tem agendamento no mesmo horário neste dia
+      const userHasAppointmentAtTime = userAppointmentsOnDate.some(appt => {
+        const apptStart = new Date(appt.appointmentDate)
+        const apptEnd = new Date(apptStart.getTime() + (appt.duration || 1) * 60 * 60 * 1000)
+        
+        // Verificar sobreposição de horários para o mesmo usuário
+        return (selectedDateTime < apptEnd && endTime > apptStart)
+      })
+
+      if (userHasAppointmentAtTime) {
+        return res.status(400).json({ 
+          message: "Você já possui um agendamento neste horário. Escolha outro horário ou data." 
+        })
+      }
+
+      // Buscar agendamentos existentes no mesmo dia
+      const existingAppointments = await Appointment.find({
+        appointmentDate: {
+          $gte: new Date(selectedDateTime.getFullYear(), selectedDateTime.getMonth(), selectedDateTime.getDate()),
+          $lt: new Date(selectedDateTime.getFullYear(), selectedDateTime.getMonth(), selectedDateTime.getDate() + 1)
+        },
+        status: { $ne: 'cancelled' }
+      })
+
+      // Verificar se há sobreposição de horários
+      const hasConflict = existingAppointments.some(appt => {
+        const apptStart = new Date(appt.appointmentDate)
+        const apptEnd = new Date(apptStart.getTime() + (appt.duration || 1) * 60 * 60 * 1000)
+        
+        return (selectedDateTime < apptEnd && endTime > apptStart)
+      })
+
+      if (hasConflict) {
+        return res.status(400).json({ 
+          message: "Este horário não está disponível. Já existe um agendamento neste período." 
+        })
+      }
 
       const newAppointment = await Appointment.create({
         userId,
@@ -29,6 +108,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         servicePrice,
         appointmentDate,
         appointmentTime,
+        duration: duration || 1,
         motorcycle,
         plate,
         notes,
@@ -45,16 +125,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   // Buscar agendamentos
   if (req.method === "GET") {
     try {
-      const { userId } = req.query
-
-      console.log("Buscando agendamentos de:", userId)
-
-      let query = {}
-      if (userId) {
-        query = { userId: new mongoose.Types.ObjectId(userId as string) }
+      const decoded = verifyToken(req)
+      if (!decoded) {
+        return res.status(401).json({ message: "Token inválido" })
       }
 
-      const appointments = await Appointment.find(query).populate("userId", "name email phone")
+      const userId = decoded.userId || decoded._id
+      console.log("Buscando agendamentos de:", userId)
+
+      // Buscar apenas agendamentos do usuário autenticado
+      const appointments = await Appointment.find({ userId: new mongoose.Types.ObjectId(userId) })
+        .sort({ appointmentDate: 1, appointmentTime: 1 })
 
       return res.status(200).json(appointments)
     } catch (error) {
@@ -66,10 +147,25 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   // Deletar agendamento
   if (req.method === "DELETE") {
     try {
-      const { id } = req.query
+      const decoded = verifyToken(req)
+      if (!decoded) {
+        return res.status(401).json({ message: "Token inválido" })
+      }
 
+      const { id } = req.query
       if (!id) {
         return res.status(400).json({ message: "ID do agendamento não fornecido." })
+      }
+
+      // Verificar se o agendamento pertence ao usuário
+      const appointment = await Appointment.findById(id)
+      if (!appointment) {
+        return res.status(404).json({ message: "Agendamento não encontrado." })
+      }
+
+      const userId = decoded.userId || decoded._id
+      if (appointment.userId.toString() !== userId) {
+        return res.status(403).json({ message: "Não autorizado a cancelar este agendamento." })
       }
 
       console.log("Deletando agendamento:", id)
