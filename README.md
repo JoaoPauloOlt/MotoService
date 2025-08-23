@@ -50,13 +50,15 @@ npm run build
 
 1. **Build Command:**
 ```bash
-npm install && npm run build
+npm ci && npm run build
 ```
 
 2. **Start Command:**
 ```bash
 npm start
 ```
+
+**⚠️ IMPORTANTE:** Use `npm ci` em vez de `npm install` para builds mais rápidos e confiáveis.
 
 ### **Passo 5: Configurar Variáveis de Ambiente**
 
@@ -77,9 +79,30 @@ NEXTAUTH_URL=https://motoservice-app.onrender.com
 
 ### **Passo 6: Deploy**
 
-1. Clique em "Create Web Service"
+1. Clique em **"Create Web Service"**
 2. Aguarde o build (pode demorar 5-10 minutos)
 3. Seu app estará disponível em: `https://motoservice-app.onrender.com`
+
+## 🔧 Troubleshooting
+
+### **Erro de TypeScript no Build:**
+Se você encontrar erro de TypeScript durante o build:
+
+1. **Verifique se as dependências estão corretas:**
+   - `typescript`, `@types/node`, `@types/react` devem estar em `dependencies`
+   - Não em `devDependencies`
+
+2. **Use o comando correto no Render:**
+   - **Build Command:** `npm ci && npm run build`
+   - **Start Command:** `npm start`
+
+3. **Verifique o arquivo .npmrc:**
+   - Deve conter `legacy-peer-deps=true` e `production=false`
+
+### **Erro de MongoDB:**
+- Verifique se a `MONGODB_URI` está correta
+- Confirme se o IP do Render está liberado no MongoDB Atlas
+- Teste a conexão localmente primeiro
 
 ## 🔧 Configuração Local
 
