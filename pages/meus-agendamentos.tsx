@@ -10,7 +10,6 @@ interface Appointment {
   serviceName: string
   servicePrice: number
   appointmentDate: string
-  appointmentTime: string
   duration: number
   motorcycle: string
   plate: string
@@ -82,9 +81,7 @@ export default function MeusAgendamentosPage() {
   const formatTime = (dateString: string) => {
     const date = new Date(dateString)
     return date.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })
-  }
-  
-
+  }  
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'pending':
@@ -240,7 +237,7 @@ export default function MeusAgendamentosPage() {
                 <div className="mt-6 pt-4 border-t border-gray-700">
                   <a
                     href={`https://wa.me/5511947202934?text=${encodeURIComponent(
-                      `Olá! Gostaria de confirmar os detalhes do meu agendamento: ${appt.serviceName} para ${formatDate(appt.appointmentDate)} às ${formatTime(appt.appointmentTime)}.`
+                      `Olá! Gostaria de confirmar os detalhes do meu agendamento: ${appt.serviceName} para ${formatDate(appt.appointmentDate)} às ${formatTime(appt.appointmentDate)}.`
                     )}`}
                     target="_blank"
                     rel="noopener noreferrer"

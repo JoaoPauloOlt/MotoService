@@ -90,18 +90,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         })
       }
 
-      // Criar agendamento
       const newAppointment = await Appointment.create({
         userId,
         serviceName,
         servicePrice,
-        appointmentDate: selectedDateTime, // ✅ salvo com data + hora
+        appointmentDate: selectedDateTime, // salva data + hora
         duration: duration || 1,
         motorcycle,
         plate,
         notes,
         status: "pending",
-      })
+      });
 
       return res.status(201).json(newAppointment)
     } catch (error: any) {

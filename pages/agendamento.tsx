@@ -169,72 +169,71 @@ export default function AgendamentoPage() {
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-
-    //pegar info do serviço selecionado
-    const serviceInfo = getSelectedServiceInfo()
-
-    //se não chegou no último step, só avança
+    e.preventDefault();
+  
+    const serviceInfo = getSelectedServiceInfo();
+  
+    // Se ainda não chegou no último step, só avança
     if (step < 3) {
-      setStep((prev) => prev + 1);
+      setStep(prev => prev + 1);
       return;
     }
-
+  
+    if (!selectedDate || !selectedTime || !serviceInfo) {
+      alert("Selecione data, horário e serviço.");
+      return;
+    }
+  
+    // Combinar data + hora em uma ISO string
+    const [hours, minutes] = selectedTime.split(":").map(Number);
+    const appointmentDateISO = new Date(selectedDate);
+    appointmentDateISO.setHours(hours, minutes, 0, 0);
+  
     // Verificar conflito de horário
-    if (selectedDate && selectedTime && checkTimeConflict(selectedDate, selectedTime, customDuration)) {
-      alert("Este horário não está disponível. Por favor, escolha outro horário.")
-      return
+    const endTime = new Date(appointmentDateISO.getTime() + customDuration * 60 * 60 * 1000);
+    if (checkTimeConflict(selectedDate, selectedTime, customDuration)) {
+      alert("Este horário não está disponível. Escolha outro horário.");
+      return;
     }
-
-    //último step -> enviar pro servidor
-    // Juntar a data com o horário escolhido
-    // Montar a data + hora juntas
-    let appointmentDate: string | null = null
-    if (selectedDate && selectedTime) {
-      const [hours, minutes] = selectedTime.split(":").map(Number)
-      const combined = new Date(selectedDate)
-      combined.setHours(hours, minutes, 0, 0)
-      appointmentDate = combined.toISOString()
-    }
-
+  
     const payload = {
       userId: user?._id,
-      serviceName: serviceInfo?.name,
-      servicePrice: serviceInfo?.price,
-      appointmentDate, // ✅ já vem com data + hora
+      serviceName: serviceInfo.name,
+      servicePrice: serviceInfo.price,
+      appointmentDate: appointmentDateISO.toISOString(), // ✅ data + hora combinadas
       duration: customDuration,
       motorcycle: formData.motorcycle,
       plate: formData.plate,
       notes: formData.notes,
-    }
-
-
+    };
+  
+    console.log("Payload para envio:", payload);
   
     try {
-      const token = Cookies.get("auth-token") // usar js-cookie
+      const token = Cookies.get("auth-token");
       const res = await fetch("/api/auth/agendamentos", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}` // 👈 enviar token
+          "Authorization": `Bearer ${token}`
         },
         body: JSON.stringify(payload),
-      })
-
+      });
   
-      const data = await res.json() // pega a resposta do servidor
+      const data = await res.json();
+  
       if (res.ok) {
-        alert("Agendamento realizado com sucesso!")
-        setStep(4) // vai para a tela de confirmação
+        alert("Agendamento realizado com sucesso!");
+        setStep(4); // tela de confirmação
       } else {
-        console.error("Erro do servidor:", data)
-        alert("Erro ao agendar. Tente novamente.")
+        console.error("Erro do servidor:", data);
+        alert(data.message || "Erro ao agendar. Tente novamente.");
       }
     } catch (err) {
-      console.error("Erro no fetch:", err)
-      alert("Erro no servidor.")
+      console.error("Erro no fetch:", err);
+      alert("Erro no servidor.");
     }
-  }  
+  };  
 
   if (isLoading) {
     return <div className="min-h-screen bg-black flex items-center justify-center"><p className="text-white">Carregando autenticação...</p></div>
