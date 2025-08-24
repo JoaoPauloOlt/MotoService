@@ -1,7 +1,7 @@
 {
-  "name": "motoservice",
+  "name": "motopeças",
   "version": "1.0.0",
-  "description": "Site da MotoService",
+  "description": "Site da motopeças",
   "main": "index.tsx",
   "scripts": {
     "dev": "next dev",

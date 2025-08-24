@@ -42,7 +42,7 @@ export default function Menu() {
               alt="MotoService Logo"
               className="h-16 w-16 rounded-full"
             />
-            <span className="text-2xl font-bold text-red-500">MotoService</span>
+            <span className="text-2xl font-bold text-red-500">MotoPeças</span>
           </div>
 
           {/* Menu Desktop */}

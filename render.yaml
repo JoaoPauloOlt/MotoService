@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: motoservice-app
+    name: motopeças
     env: node
     buildCommand: npm ci && npm run build
     startCommand: npm start
@@ -14,4 +14,4 @@ services:
       - key: NEXTAUTH_SECRET
         sync: false
       - key: NEXTAUTH_URL
-        value: https://motoservice.onrender.com
+        value: https://motopeças.onrender.com

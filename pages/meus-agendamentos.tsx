@@ -79,9 +79,11 @@ export default function MeusAgendamentosPage() {
     })
   }
 
-  const formatTime = (timeString: string) => {
-    return timeString
+  const formatTime = (dateString: string) => {
+    const date = new Date(dateString)
+    return date.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })
   }
+  
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -200,7 +202,7 @@ export default function MeusAgendamentosPage() {
                   
                   <div className="flex items-center gap-2">
                     <Clock size={16} className="text-green-500" />
-                    <span><strong>Horário:</strong> {formatTime(appt.appointmentTime)}</span>
+                    <span><strong>Horário:</strong> {formatTime(appt.appointmentDate)}</span>
                   </div>
                   
                   <div className="flex items-center gap-2">

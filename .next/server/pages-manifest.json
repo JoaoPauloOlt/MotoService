@@ -2,9 +2,7 @@
   "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
-  "/api/auth/me": "pages/api/auth/me.js",
   "/": "pages/index.js",
-  "/login": "pages/login.js",
-  "/meus-agendamentos": "pages/meus-agendamentos.js",
-  "/api/auth/agendamentos": "pages/api/auth/agendamentos.js"
+  "/agendamento": "pages/agendamento.js",
+  "/meus-agendamentos": "pages/meus-agendamentos.js"
 }

@@ -66,7 +66,7 @@ export default function HomePage() {
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-4">
             <img src="/img/logoSnap.webp" alt="MotoService Logo" className="h-12 w-auto" />
-            <h1 className="text-2xl font-bold text-green-500">MotoService</h1>
+            <h1 className="text-2xl font-bold text-green-500">MotoPeças</h1>
           </div>
 
           {/* Desktop Navigation */}
@@ -252,7 +252,7 @@ export default function HomePage() {
         <div className="relative z-10 text-center max-w-4xl mx-auto px-4">
           <h1 className="text-5xl md:text-7xl font-bold mb-6 animate-bounce-in">
             <span className="text-white">Moto</span>
-            <span className="text-green-500">Service</span>
+            <span className="text-green-500">Peças</span>
           </h1>
           <p className="text-xl md:text-2xl text-gray-300 mb-8 animate-slide-up max-w-3xl mx-auto">
             Especialistas em manutenção e reparo de motocicletas. 
@@ -266,7 +266,7 @@ export default function HomePage() {
               {user ? "Agendar Serviço" : "Fazer Login para Agendar"}
             </button>
             <a
-              href="https://wa.me/5511947202939?text=Olá! Gostaria de saber mais sobre os serviços da MotoService."
+              href="https://wa.me/5511947202939?text=Olá! Gostaria de saber mais sobre os serviços da Motopeças."
               target="_blank"
               rel="noopener noreferrer"
               className="btn-whatsapp text-lg px-8 py-4 rounded-full"
@@ -334,7 +334,7 @@ export default function HomePage() {
             <div>
               <h2 className="text-4xl md:text-5xl font-bold mb-6">
                 <span className="text-white">Sobre a</span>
-                <span className="text-green-500"> MotoService</span>
+                <span className="text-green-500"> MotoPeças</span>
               </h2>
               <p className="text-lg text-gray-400 mb-6">
                 Somos uma oficina especializada em motocicletas com anos de experiência no mercado. 
@@ -418,7 +418,7 @@ export default function HomePage() {
               {/* Botão WhatsApp proeminente */}
               <div className="pt-4">
                 <a
-                  href="https://wa.me/5511947202939?text=Olá! Gostaria de saber mais sobre os serviços da MotoService."
+                  href="https://wa.me/5511947202939?text=Olá! Gostaria de saber mais sobre os serviços da Motopeças."
                   target="_blank"
                   rel="noopener noreferrer"
                   className="btn-whatsapp w-full text-center justify-center"
@@ -461,7 +461,7 @@ export default function HomePage() {
         <div className="max-w-6xl mx-auto px-4 text-center">
           <div className="flex items-center justify-center gap-4 mb-6">
             <img src="/img/logoSnap.webp" alt="MotoService Logo" className="h-10 w-auto" />
-            <h3 className="text-2xl font-bold text-green-500">MotoService</h3>
+            <h3 className="text-2xl font-bold text-green-500">Motopeças</h3>
           </div>
           <p className="text-gray-400 mb-6">
             Especialistas em motocicletas com qualidade e confiança
@@ -476,7 +476,7 @@ export default function HomePage() {
           </div>
           <div className="mt-8 pt-8 border-t border-gray-800">
             <p className="text-gray-500">
-              © 2024 MotoService. Todos os direitos reservados.
+              © 2024 MotoPeças. Todos os direitos reservados.
             </p>
           </div>
         </div>

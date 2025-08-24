@@ -5,6 +5,7 @@ import { useRouter } from "next/router"
 import { useAuth } from "../contexts/AuthContext"
 import Appointment, { IAppointment } from "../models/Appointment"
 import { CheckCircle, ArrowLeft, Wrench, Calendar, Clock, Car, MessageCircle } from "lucide-react"
+import Cookies from "js-cookie"
 
 export default function AgendamentoPage() {
   const { user, isLoading } = useAuth()
@@ -92,7 +93,12 @@ export default function AgendamentoPage() {
   useEffect(() => {
     const fetchExistingAppointments = async () => {
       try {
-        const res = await fetch("/api/auth/agendamentos")
+        const token = Cookies.get("auth-token")
+        const res = await fetch("/api/auth/agendamentos?dateRange=30", {
+          headers: {
+            "Authorization": `Bearer ${token}`
+          }
+        })
         if (res.ok) {
           const data = await res.json()
           setExistingAppointments(data)
@@ -113,23 +119,19 @@ export default function AgendamentoPage() {
     const selectedDateTime = new Date(date)
     const [hours, minutes] = time.split(':').map(Number)
     selectedDateTime.setHours(hours, minutes, 0, 0)
-    
+  
     const endTime = new Date(selectedDateTime.getTime() + duration * 60 * 60 * 1000)
-
+  
     return existingAppointments.some(appt => {
-      // Verificar se é o mesmo dia
-      if (appt.appointmentDate.split('T')[0] !== date.toISOString().split('T')[0]) return false
-      
-      // Verificar se o status não é cancelado
       if (appt.status === 'cancelled') return false
-      
+  
       const apptStart = new Date(appt.appointmentDate)
       const apptEnd = new Date(apptStart.getTime() + (appt.duration || 1) * 60 * 60 * 1000)
-      
-      // Verificar sobreposição de horários
+  
+      // verificar sobreposição de horários
       return (selectedDateTime < apptEnd && endTime > apptStart)
     })
-  }
+  }  
 
   const handleNext = () => setStep(prev => prev + 1)
   const handleBack = () => setStep(prev => prev - 1)
@@ -185,24 +187,40 @@ export default function AgendamentoPage() {
     }
 
     //último step -> enviar pro servidor
+    // Juntar a data com o horário escolhido
+    // Montar a data + hora juntas
+    let appointmentDate: string | null = null
+    if (selectedDate && selectedTime) {
+      const [hours, minutes] = selectedTime.split(":").map(Number)
+      const combined = new Date(selectedDate)
+      combined.setHours(hours, minutes, 0, 0)
+      appointmentDate = combined.toISOString()
+    }
+
     const payload = {
       userId: user?._id,
       serviceName: serviceInfo?.name,
       servicePrice: serviceInfo?.price,
-      appointmentDate: selectedDate?.toISOString(),
-      appointmentTime: selectedTime,
+      appointmentDate, // ✅ já vem com data + hora
       duration: customDuration,
       motorcycle: formData.motorcycle,
       plate: formData.plate,
       notes: formData.notes,
     }
+
+
   
     try {
+      const token = Cookies.get("auth-token") // usar js-cookie
       const res = await fetch("/api/auth/agendamentos", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}` // 👈 enviar token
+        },
         body: JSON.stringify(payload),
       })
+
   
       const data = await res.json() // pega a resposta do servidor
       if (res.ok) {
@@ -413,7 +431,7 @@ export default function AgendamentoPage() {
                             disabled={!isAvailable}
                             className={`p-3 text-sm rounded-lg transition-all ${
                               selectedDate && selectedDate.toDateString() === date.toDateString()
-                                ? 'bg-red-500 text-black' // Changed to red for selected date
+                                ? 'bg-green-500 text-black' // Changed to red for selected date
                                 : isAvailable
                                 ? 'hover:bg-gray-800 text-gray-300'
                                 : 'bg-gray-800 text-gray-500 cursor-not-allowed'

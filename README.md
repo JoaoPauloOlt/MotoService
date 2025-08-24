@@ -1,4 +1,4 @@
-# 🏍️ MotoService - Sistema de Agendamento
+# 🏍️ MotoPeças - Sistema de Agendamento
 
 Sistema completo de agendamento de serviços para oficina de motos com autenticação, tema dark e integração WhatsApp.
 
@@ -41,7 +41,7 @@ npm run build
    - Escolha a branch `main`
 
 2. **Configure o Serviço:**
-   - **Name:** `motoservice-app`
+   - **Name:** `motopeças`
    - **Environment:** `Node`
    - **Region:** `Oregon (US West)` ou mais próxima
    - **Branch:** `main`
@@ -69,7 +69,7 @@ NODE_ENV=production
 MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/motoservice?retryWrites=true&w=majority
 JWT_SECRET=sua-chave-jwt-super-secreta-aqui
 NEXTAUTH_SECRET=sua-chave-nextauth-super-secreta-aqui
-NEXTAUTH_URL=https://motoservice.onrender.com
+NEXTAUTH_URL=https://motopeças.onrender.com
 ```
 
 **⚠️ IMPORTANTE:**
@@ -81,7 +81,7 @@ NEXTAUTH_URL=https://motoservice.onrender.com
 
 1. Clique em **"Create Web Service"**
 2. Aguarde o build (pode demorar 5-10 minutos)
-3. Seu app estará disponível em: `https://motoservice.onrender.com`
+3. Seu app estará disponível em: `https://motopeças.onrender.com`
 
 ## 🔧 Troubleshooting
 
