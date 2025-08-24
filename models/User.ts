@@ -38,7 +38,4 @@ const userSchema = new mongoose.Schema<IUser>({
   timestamps: true
 })
 
-// Índice para busca por email
-userSchema.index({ email: 1 })
-
 export default mongoose.models.User || mongoose.model<IUser>('User', userSchema)
