@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: motopeças
+    name: snapmotopeças
     env: node
     buildCommand: npm ci && npm run build
     startCommand: npm start
@@ -14,4 +14,4 @@ services:
       - key: NEXTAUTH_SECRET
         sync: false
       - key: NEXTAUTH_URL
-        value: https://motopeças.onrender.com
+        value: https://snapmotopeças.onrender.com

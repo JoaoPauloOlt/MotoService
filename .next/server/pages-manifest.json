@@ -3,6 +3,9 @@
   "/_error": "pages/_error.js",
   "/_document": "pages/_document.js",
   "/": "pages/index.js",
-  "/agendamento": "pages/agendamento.js",
-  "/meus-agendamentos": "pages/meus-agendamentos.js"
+  "/login": "pages/login.js",
+  "/meus-agendamentos": "pages/meus-agendamentos.js",
+  "/api/auth/login": "pages/api/auth/login.js",
+  "/api/auth/agendamentos": "pages/api/auth/agendamentos.js",
+  "/agendamento": "pages/agendamento.js"
 }

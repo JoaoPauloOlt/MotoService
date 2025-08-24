@@ -1,7 +1,7 @@
 {
-  "name": "motopeças",
+  "name": "snapmotopeças",
   "version": "1.0.0",
-  "description": "Site da motopeças",
+  "description": "Site da SnapMotopeças",
   "main": "index.tsx",
   "scripts": {
     "dev": "next dev",

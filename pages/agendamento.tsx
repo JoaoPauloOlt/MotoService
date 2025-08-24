@@ -164,7 +164,7 @@ export default function AgendamentoPage() {
   // Função para abrir WhatsApp com mensagem automática baseada no serviço
   const openWhatsApp = (serviceName: string, price: number) => {
     const message = `Olá! Gostaria de agendar o serviço: ${serviceName} - R$ ${price.toFixed(2)}`
-    const whatsappUrl = `https://wa.me/5511947202939?text=${encodeURIComponent(message)}`
+    const whatsappUrl = `https://wa.me/5511947202934?text=${encodeURIComponent(message)}`
     window.open(whatsappUrl, "_blank")
   }
 
@@ -268,7 +268,7 @@ export default function AgendamentoPage() {
               {/* Botão WhatsApp */}
               <div className="mb-6">
                 <a
-                  href={`https://wa.me/5511947202939?text=${encodeURIComponent(
+                  href={`https://wa.me/5511947202934?text=${encodeURIComponent(
                     `Olá! Acabei de agendar o serviço: ${getSelectedServiceInfo()?.name} para ${selectedDate && formatDate(selectedDate)} às ${selectedTime}. Gostaria de confirmar os detalhes.`
                   )}`}
                   target="_blank"

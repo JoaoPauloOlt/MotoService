@@ -239,7 +239,7 @@ export default function MeusAgendamentosPage() {
                 {/* Botão WhatsApp para confirmar detalhes */}
                 <div className="mt-6 pt-4 border-t border-gray-700">
                   <a
-                    href={`https://wa.me/5511947202939?text=${encodeURIComponent(
+                    href={`https://wa.me/5511947202934?text=${encodeURIComponent(
                       `Olá! Gostaria de confirmar os detalhes do meu agendamento: ${appt.serviceName} para ${formatDate(appt.appointmentDate)} às ${formatTime(appt.appointmentTime)}.`
                     )}`}
                     target="_blank"
